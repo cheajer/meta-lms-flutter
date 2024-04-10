@@ -1,4 +1,3 @@
-// Assuming you have a file named topic.dart
 class TopicModel {
   final int id;
   final String description;

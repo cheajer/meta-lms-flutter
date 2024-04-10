@@ -44,7 +44,11 @@ dependencies:
   path_provider: ^2.0.15
   sqlite3_flutter_libs: ^0.5.9
   get_it: ^7.6.0
-
+  flutter_file_view: ^2.2.1
+  video_player: ^2.7.0
+  chewie: ^1.7.4
+  flutter_pdfview: ^1.2.1
+  webview_flutter: ^4.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

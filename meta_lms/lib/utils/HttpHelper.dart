@@ -7,7 +7,7 @@ class HttpHelper {
   http.Client client;
 
   HttpHelper({
-    this.baseUrl = 'https://8d2c-2001-8003-280b-2101-6dbf-269f-7c5a-2bde.ngrok-free.app',
+    this.baseUrl = 'https://f150-2001-8003-280b-2101-29b6-d170-9739-73ad.ngrok-free.app',
     http.Client? client,
   }) : client = client ?? http.Client();
 
@@ -22,6 +22,10 @@ class HttpHelper {
     } catch (e) {
       throw Exception('Failed to load data: $e');
     }
+  }
+
+  String getBaseUrl() {
+    return baseUrl;
   }
 
   Future<dynamic> post(String url, dynamic body, {String? token}) async {

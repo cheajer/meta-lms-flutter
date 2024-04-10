@@ -7,7 +7,10 @@ import 'package:provider/provider.dart';
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(bool)? callback; // Optional callback
-  const GlobalAppBar({Key? key, this.callback}) : super(key: key);
+  final bool automaticallyImplyLeading;
+  const GlobalAppBar(
+      {Key? key, this.callback, this.automaticallyImplyLeading = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,30 +59,36 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
               });
     }
 
-    return AppBar(
-      backgroundColor: AppColors.backgroundColor,
-      elevation: 1,
-      title: Row(children: [
-        IconButton(
-          color: AppColors.textColor,
-          icon: const Icon(Icons.menu_outlined),
-          onPressed: () {
-            _testCallback();
-          },
-        ),
-        const Spacer(),
-        SvgPicture.asset('assets/icons/mark.svg', width: 40),
-        const Spacer(),
-        IconButton(
-          color: AppColors.textColor,
-          icon: const Icon(Icons.logout_outlined),
-          onPressed: () {
-            // Add your logout button press logic here
-            _logout();
-          },
-        ),
-      ]),
-    );
+    return (automaticallyImplyLeading)
+        ? AppBar(
+            automaticallyImplyLeading: true,
+            backgroundColor: AppColors.backgroundColor,
+            iconTheme: const IconThemeData(color: AppColors.textColor),
+            elevation: 1,
+            title: SvgPicture.asset('assets/icons/mark.svg', width: 50),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout_outlined),
+                color: AppColors.textColor,
+                onPressed: _logout,
+              ),
+            ],
+          )
+        : AppBar(
+            automaticallyImplyLeading: false,
+            leading: const BackButton(),
+            backgroundColor: AppColors.backgroundColor,
+            iconTheme: const IconThemeData(color: AppColors.textColor),
+            elevation: 1,
+            title: SvgPicture.asset('assets/icons/mark.svg', width: 50),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout_outlined),
+                color: AppColors.textColor,
+                onPressed: _logout,
+              ),
+            ],
+          );
   }
 
   @override

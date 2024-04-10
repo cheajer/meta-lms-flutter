@@ -38,6 +38,9 @@ class _LoginPageState extends State<LoginPage> {
         // Since we're inside a callback, use the context from the callback's scope
         NavigationService.navigateToHomePage();
       }
+
+      _usernameController.text = "cheajer";
+      _passwordController.text = "b4b26php9125";
       
     });
   }
