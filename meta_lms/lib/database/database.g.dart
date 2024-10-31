@@ -58,9 +58,22 @@ class $TopicsTable extends Topics with TableInfo<$TopicsTable, Topic> {
             SqlDialect.postgres: '',
           }),
           defaultValue: const Constant(false));
+  static const VerificationMeta _lastAccessedMeta =
+      const VerificationMeta('lastAccessed');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, description, topicGroupId, topicName, imageUrl, archived];
+  late final GeneratedColumn<DateTime> lastAccessed = GeneratedColumn<DateTime>(
+      'last_accessed', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        description,
+        topicGroupId,
+        topicName,
+        imageUrl,
+        archived,
+        lastAccessed
+      ];
   @override
   String get aliasedName => _alias ?? 'topics';
   @override
@@ -101,6 +114,12 @@ class $TopicsTable extends Topics with TableInfo<$TopicsTable, Topic> {
       context.handle(_archivedMeta,
           archived.isAcceptableOrUnknown(data['archived']!, _archivedMeta));
     }
+    if (data.containsKey('last_accessed')) {
+      context.handle(
+          _lastAccessedMeta,
+          lastAccessed.isAcceptableOrUnknown(
+              data['last_accessed']!, _lastAccessedMeta));
+    }
     return context;
   }
 
@@ -122,6 +141,8 @@ class $TopicsTable extends Topics with TableInfo<$TopicsTable, Topic> {
           .read(DriftSqlType.string, data['${effectivePrefix}image_url'])!,
       archived: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}archived'])!,
+      lastAccessed: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_accessed']),
     );
   }
 
@@ -138,13 +159,15 @@ class Topic extends DataClass implements Insertable<Topic> {
   final String topicName;
   final String imageUrl;
   final bool archived;
+  final DateTime? lastAccessed;
   const Topic(
       {required this.id,
       required this.description,
       required this.topicGroupId,
       required this.topicName,
       required this.imageUrl,
-      required this.archived});
+      required this.archived,
+      this.lastAccessed});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -154,6 +177,9 @@ class Topic extends DataClass implements Insertable<Topic> {
     map['topic_name'] = Variable<String>(topicName);
     map['image_url'] = Variable<String>(imageUrl);
     map['archived'] = Variable<bool>(archived);
+    if (!nullToAbsent || lastAccessed != null) {
+      map['last_accessed'] = Variable<DateTime>(lastAccessed);
+    }
     return map;
   }
 
@@ -165,6 +191,9 @@ class Topic extends DataClass implements Insertable<Topic> {
       topicName: Value(topicName),
       imageUrl: Value(imageUrl),
       archived: Value(archived),
+      lastAccessed: lastAccessed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastAccessed),
     );
   }
 
@@ -178,6 +207,7 @@ class Topic extends DataClass implements Insertable<Topic> {
       topicName: serializer.fromJson<String>(json['topicName']),
       imageUrl: serializer.fromJson<String>(json['imageUrl']),
       archived: serializer.fromJson<bool>(json['archived']),
+      lastAccessed: serializer.fromJson<DateTime?>(json['lastAccessed']),
     );
   }
   @override
@@ -190,6 +220,7 @@ class Topic extends DataClass implements Insertable<Topic> {
       'topicName': serializer.toJson<String>(topicName),
       'imageUrl': serializer.toJson<String>(imageUrl),
       'archived': serializer.toJson<bool>(archived),
+      'lastAccessed': serializer.toJson<DateTime?>(lastAccessed),
     };
   }
 
@@ -199,7 +230,8 @@ class Topic extends DataClass implements Insertable<Topic> {
           int? topicGroupId,
           String? topicName,
           String? imageUrl,
-          bool? archived}) =>
+          bool? archived,
+          Value<DateTime?> lastAccessed = const Value.absent()}) =>
       Topic(
         id: id ?? this.id,
         description: description ?? this.description,
@@ -207,6 +239,8 @@ class Topic extends DataClass implements Insertable<Topic> {
         topicName: topicName ?? this.topicName,
         imageUrl: imageUrl ?? this.imageUrl,
         archived: archived ?? this.archived,
+        lastAccessed:
+            lastAccessed.present ? lastAccessed.value : this.lastAccessed,
       );
   @override
   String toString() {
@@ -216,14 +250,15 @@ class Topic extends DataClass implements Insertable<Topic> {
           ..write('topicGroupId: $topicGroupId, ')
           ..write('topicName: $topicName, ')
           ..write('imageUrl: $imageUrl, ')
-          ..write('archived: $archived')
+          ..write('archived: $archived, ')
+          ..write('lastAccessed: $lastAccessed')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, description, topicGroupId, topicName, imageUrl, archived);
+  int get hashCode => Object.hash(id, description, topicGroupId, topicName,
+      imageUrl, archived, lastAccessed);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -233,7 +268,8 @@ class Topic extends DataClass implements Insertable<Topic> {
           other.topicGroupId == this.topicGroupId &&
           other.topicName == this.topicName &&
           other.imageUrl == this.imageUrl &&
-          other.archived == this.archived);
+          other.archived == this.archived &&
+          other.lastAccessed == this.lastAccessed);
 }
 
 class TopicsCompanion extends UpdateCompanion<Topic> {
@@ -243,6 +279,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
   final Value<String> topicName;
   final Value<String> imageUrl;
   final Value<bool> archived;
+  final Value<DateTime?> lastAccessed;
   const TopicsCompanion({
     this.id = const Value.absent(),
     this.description = const Value.absent(),
@@ -250,6 +287,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
     this.topicName = const Value.absent(),
     this.imageUrl = const Value.absent(),
     this.archived = const Value.absent(),
+    this.lastAccessed = const Value.absent(),
   });
   TopicsCompanion.insert({
     this.id = const Value.absent(),
@@ -258,6 +296,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
     required String topicName,
     this.imageUrl = const Value.absent(),
     this.archived = const Value.absent(),
+    this.lastAccessed = const Value.absent(),
   })  : topicGroupId = Value(topicGroupId),
         topicName = Value(topicName);
   static Insertable<Topic> custom({
@@ -267,6 +306,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
     Expression<String>? topicName,
     Expression<String>? imageUrl,
     Expression<bool>? archived,
+    Expression<DateTime>? lastAccessed,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -275,6 +315,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
       if (topicName != null) 'topic_name': topicName,
       if (imageUrl != null) 'image_url': imageUrl,
       if (archived != null) 'archived': archived,
+      if (lastAccessed != null) 'last_accessed': lastAccessed,
     });
   }
 
@@ -284,7 +325,8 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
       Value<int>? topicGroupId,
       Value<String>? topicName,
       Value<String>? imageUrl,
-      Value<bool>? archived}) {
+      Value<bool>? archived,
+      Value<DateTime?>? lastAccessed}) {
     return TopicsCompanion(
       id: id ?? this.id,
       description: description ?? this.description,
@@ -292,6 +334,7 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
       topicName: topicName ?? this.topicName,
       imageUrl: imageUrl ?? this.imageUrl,
       archived: archived ?? this.archived,
+      lastAccessed: lastAccessed ?? this.lastAccessed,
     );
   }
 
@@ -316,6 +359,9 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
     if (archived.present) {
       map['archived'] = Variable<bool>(archived.value);
     }
+    if (lastAccessed.present) {
+      map['last_accessed'] = Variable<DateTime>(lastAccessed.value);
+    }
     return map;
   }
 
@@ -327,7 +373,8 @@ class TopicsCompanion extends UpdateCompanion<Topic> {
           ..write('topicGroupId: $topicGroupId, ')
           ..write('topicName: $topicName, ')
           ..write('imageUrl: $imageUrl, ')
-          ..write('archived: $archived')
+          ..write('archived: $archived, ')
+          ..write('lastAccessed: $lastAccessed')
           ..write(')'))
         .toString();
   }

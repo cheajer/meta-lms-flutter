@@ -8,4 +8,5 @@ class Topics extends Table {
   TextColumn get topicName => text().named('topic_name')();
   TextColumn get imageUrl => text().named('image_url').withDefault(const Constant(''))();
   BoolColumn get archived => boolean().named('archived').withDefault(const Constant(false))();
+  DateTimeColumn get lastAccessed => dateTime().named('last_accessed').nullable()();
 }

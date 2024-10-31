@@ -17,7 +17,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   Future<void> clearAllTables() async {
     // For each table, execute a delete statement without a where clause,
@@ -53,6 +53,9 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 3) {
             await m.createTable(assessments);
+          }
+          if (from < 4) {
+            await m.addColumn(topics, topics.lastAccessed);
           }
           // Future version migrations go here
           // if (from < 3) {
