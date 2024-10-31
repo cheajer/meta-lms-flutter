@@ -118,6 +118,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
 
   Widget _buildDrawer() {
     return Drawer(
+      width: MediaQuery.of(context).size.width* 0.6,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -128,43 +129,47 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
             ),
             child: Column(
               children: [
-                (_isValidUrl(widget.topic.imageUrl))
-                    ?
-                    // Correctly use Padding around the Image
-                    Image.network(
-                        widget.topic.imageUrl!,
-                        width: MediaQuery.of(context).size.width - 100,
-                        height: 90,
-                        fit: BoxFit.cover, // Ensure the image covers the box
-                      )
-                    : Image.asset(
-                        'assets/images/default.jpg',
-                        width: MediaQuery.of(context).size.width - 100,
-                        height: 90,
-                        fit: BoxFit.cover,
-                      ),
-                const Spacer(),
-                Row(
+                                Row(
                   children: [
                     Text(
                       widget.topic.topicName,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
+                        fontFamily: "Oswald",
                         color: Colors.white,
                         fontSize: 20,
                       ),
                     ),
                   ],
                 ),
+                const Spacer(),
+                (_isValidUrl(widget.topic.imageUrl))
+                    ?
+                    // Correctly use Padding around the Image
+                    Image.network(
+                        widget.topic.imageUrl,
+                        width: MediaQuery.of(context).size.width - 90,
+                        height: 90,
+                        fit: BoxFit.cover, // Ensure the image covers the box
+                      )
+                    : Image.asset(
+                        'assets/images/default.jpg',
+                        width: MediaQuery.of(context).size.width - 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
+                const Spacer(),
+
               ],
             ),
           ),
           ListView.builder(
               shrinkWrap: true,
-              itemCount: _tabList.length,
+              itemCount: _tabList.length -1,
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: Icon(_tabIconList[index]),
+                  visualDensity: VisualDensity.comfortable,
+                  leading: Icon(_tabIconList[index], color: AppColors.primaryColor,),
                   title: Text(
                     _tabList[index],
                     style: const TextStyle(
@@ -491,254 +496,100 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
     }
   }
 
-  Widget _buildAssessmentButtonByType(AssessmentDetailModel assessmentDetail) {
-    switch (assessmentDetail.type) {
+  IconData _getAssessmentIcon(assessmentType) {
+    switch (assessmentType) {
       case "exam":
-        return GestureDetector(
-          onTap: () {
-            _openAssessmentExam(assessmentDetail);
-          },
-          child: Card(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.biotech,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(assessmentDetail.name,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Chip(
-                            label: Text(
-                              "0% Complete",
-                              style: TextStyle(fontSize: 11, color: AppColors.textColor),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _daysUntilDue(assessmentDetail.timeRange),
-                            style: const TextStyle(
-                                color: AppColors.textColor, fontSize: 11),
-                          ),
-                        )
-                      ]),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: Row(children: const [
-                        Expanded(
-                            child: Center(
-                                child: Text("COMPLETE EXAM",
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700))))
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-        );
+        return Icons.biotech;
       case "assignment":
-        return GestureDetector(
-          onTap: () {
-            _openAssessmentAssignment(assessmentDetail);
-          },
-          child: Card(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.assignment,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(assessmentDetail.name,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
-                        ),                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Chip(
-                            backgroundColor: Colors.green,
-                            label: Text(
-                              "100% Complete",
-                              style: TextStyle(fontSize: 11, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _daysUntilDue(assessmentDetail.timeRange),
-                            style: const TextStyle(
-                                color: AppColors.textColor, fontSize: 11),
-                          ),
-                        )
-                      ]),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: Row(children: const [
-                        Expanded(
-                            child: Center(
-                                child: Text("COMPLETE ASSIGNMENT",
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700))))
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-        );
+        return Icons.assignment;
       case "quiz":
-        return GestureDetector(
-          onTap: () {
-            _openAssessmentQuiz(assessmentDetail);
-          },
-          child: Card(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.quiz,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(assessmentDetail.name,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
-                        ),                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Chip(
-                            label: Text(
-                              "0% Complete",
-                              style: TextStyle(fontSize: 11, color: AppColors.textColor),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _daysUntilDue(assessmentDetail.timeRange),
-                            style: const TextStyle(
-                                color: AppColors.textColor, fontSize: 11),
-                          ),
-                        )
-                      ]),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: Row(children: const [
-                        Expanded(
-                            child: Center(
-                                child: Text("COMPLETE QUIZ",
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700))))
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-        );
+        return Icons.quiz;
       case "essay":
-        return GestureDetector(
-          onTap: () {
-            _openAssessmentEssay(assessmentDetail);
-          },
-          child: Card(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.book,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(assessmentDetail.name,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
-                        ),                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Chip(
-                            backgroundColor: Colors.green,
-                            label: Text(
-                              "100% Complete",
-                              style: TextStyle(fontSize: 11, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _daysUntilDue(assessmentDetail.timeRange),
-                            style: const TextStyle(
-                                color: AppColors.textColor, fontSize: 11),
-                          ),
-                        )
-                      ]),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: Row(children: const [
-                        Expanded(
-                            child: Center(
-                                child: Text("COMPLETE ESSAY",
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700))))
-                      ]),
-                    ),
-                  ],
-                )),
-          ),
-        );
+        return Icons.bookmark;
     }
+    return Icons.assignment;
+  }
 
-    return Container();
+  Widget _buildAssessmentButtonByType(AssessmentDetailModel assessmentDetail) {
+    return GestureDetector(
+      onTap: () {
+        switch (assessmentDetail.type) {
+          case "exam":
+            _openAssessmentExam(assessmentDetail);
+            break;
+          case "assignemnt":
+            _openAssessmentAssignment(assessmentDetail);
+            break;
+          case "quiz":
+            _openAssessmentQuiz(assessmentDetail);
+            break;
+          case "essay":
+            _openAssessmentEssay(assessmentDetail);
+            break;
+        }
+        
+      },
+      child: Card(
+        child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Icon(
+                        _getAssessmentIcon(assessmentDetail.type),
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Text(assessmentDetail.name,
+                          style: const TextStyle(color: AppColors.textColor)),
+                    ),
+                    const Spacer(),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Chip(
+                        label: Text(
+                          "0% Complete",
+                          style: TextStyle(
+                              fontSize: 11, color: AppColors.textColor),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+                Expanded(
+                  child: Row(children: [
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        _daysUntilDue(assessmentDetail.timeRange),
+                        style: const TextStyle(
+                            color: AppColors.textColor, fontSize: 11),
+                      ),
+                    )
+                  ]),
+                ),
+                const Divider(),
+                Expanded(
+                  child: Row(children: const [
+                    Expanded(
+                        child: Center(
+                            child: Text("COMPLETE EXAM",
+                                style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700))))
+                  ]),
+                ),
+              ],
+            )),
+      ),
+    );
   }
 
   Widget _buildPreparationTab() {
