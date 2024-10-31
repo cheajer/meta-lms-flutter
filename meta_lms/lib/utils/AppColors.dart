@@ -14,7 +14,8 @@ class AppColors {
   static const onSurfaceColor = Color(0xFF000000);
   static const onErrorColor = Color(0xFFFFFFFF);
 
-  static const textColor = Color.fromARGB(255, 88, 88, 88);
+  static const textColor = Color.fromARGB(255, 46, 46, 46);
+  static const iconColor = Color.fromARGB(255, 79, 79, 79);
   static const dividerColor = Color.fromARGB(255, 93, 93, 93);
 
   static MaterialColor createPrimaryMaterialColor() {
