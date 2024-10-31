@@ -24,5 +24,13 @@ class TopicsDao extends DatabaseAccessor<AppDatabase> with _$TopicsDaoMixin {
   // Define a method to delete a topic
   Future<int> deleteTopic(TopicsCompanion topic) => delete(topics).delete(topic);
 
-  // More methods as needed for your use case
+  // Define a method to get the most recently accessed topic
+  Future<Topic?> getMostRecentlyAccessedTopic() async {
+    return (select(topics)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.lastAccessed, mode: OrderingMode.desc), // Order by lastAccessed descending
+          ])
+          ..limit(1)) // Limit to only one result
+        .getSingleOrNull(); // Get the single topic or return null if none exists
+  }
 }
