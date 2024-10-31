@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meta_lms/provider/AuthProvider.dart';
 import 'package:meta_lms/services/NavigationService.dart';
+import 'package:meta_lms/ui/widgets/Logo.dart';
 import 'package:meta_lms/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +66,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: AppColors.backgroundColor,
             iconTheme: const IconThemeData(color: AppColors.textColor),
             elevation: 1,
-            title: SvgPicture.asset('assets/icons/mark.svg', width: 50),
+            title: const Logo(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout_outlined),
@@ -80,7 +81,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: AppColors.backgroundColor,
             iconTheme: const IconThemeData(color: AppColors.textColor),
             elevation: 1,
-            title: SvgPicture.asset('assets/icons/mark.svg', width: 50),
+            title: const Logo(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout_outlined),

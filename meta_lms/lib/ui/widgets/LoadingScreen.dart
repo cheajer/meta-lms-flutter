@@ -31,7 +31,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
         // Use RotationTransition to rotate the SVG
         child: RotationTransition(
           turns: Tween(begin: 0.0, end: 1.0).animate(_controller), // Defines the animation
-          child: SvgPicture.asset('assets/icons/mark.svg'), // Path to your SVG file
+          child: SvgPicture.asset('assets/icons/logo.svg'), // Path to your SVG file
         ),
       ),
     );

@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               SvgPicture.asset(
-                'assets/icons/mark.svg',
+                'assets/icons/logo.svg',
                 width: 100,
               ), // Ensure you have this SVG in your assets
               const SizedBox(height: 30),
