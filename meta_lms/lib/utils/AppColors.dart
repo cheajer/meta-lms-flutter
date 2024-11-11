@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AppColors {
-  static const primaryColor = Color(0xFF4F46E5);
-  static const primaryVariantColor = Color(0xFF3700B3);
-  static const secondaryColor = Color(0xFF03DAC6);
-  static const secondaryVariantColor = Color(0xFF018786);
-  static const backgroundColor = Color(0xFFFFFFFF);
-  static const surfaceColor = Color.fromARGB(255, 246, 246, 246);
-  static const errorColor = Color(0xFFB00020);
-  static const onPrimaryColor = Color.fromARGB(255, 182, 182, 182);
-  static const onSecondaryColor = Color(0xFF000000);
-  static const onBackgroundColor = Color(0xFF000000);
-  static const onSurfaceColor = Color(0xFF000000);
-  static const onErrorColor = Color(0xFFFFFFFF);
+  // Light Theme Colors
+  static const Color primaryColor = Color(0xFF4F46E5);
+  static const Color backgroundColorLight = Color.fromARGB(255, 228, 228, 228);
+  static const Color surfaceColorLight = Color.fromARGB(255, 255, 255, 255);
+  static const Color textColorLight = Color.fromARGB(255, 46, 46, 46);
+  static const Color iconColorLight = Color(0xFF000000);
 
-  static const textColor = Color.fromARGB(255, 46, 46, 46);
-  static const iconColor = Color.fromARGB(255, 79, 79, 79);
-  static const dividerColor = Color.fromARGB(255, 93, 93, 93);
+  // Dark Theme Colors
+  static const Color backgroundColorDark = Color(0xFF121212);
+  static const Color surfaceColorDark = Color(0xFF1F1B24);
+  static const Color textColorDark = Color(0xFFFFFFFF);
+  static const Color iconColorDark = Color(0xFFFFFFFF);
+
+  static const Color textColor =  Color.fromARGB(255, 60, 60, 60);
 
   static MaterialColor createPrimaryMaterialColor() {
     List strengths = <double>[.05];
@@ -38,4 +37,7 @@ class AppColors {
     }
     return MaterialColor(primaryColor.value, swatch);
   }
+
+
+
 }

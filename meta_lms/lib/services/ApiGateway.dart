@@ -28,7 +28,7 @@ class ApiGateway {
     if (response !=null) {
       final assessmentsJson = response as List;
       final assessments =
-          assessmentsJson.map((json) => AssessmentDetailModel.fromJson(json)).toList();
+          assessmentsJson.map((json) => AssessmentDetailModel.fromJson(json, topicId)).toList();
 
       return assessments;
     }

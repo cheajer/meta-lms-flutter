@@ -9,8 +9,10 @@ import 'package:provider/provider.dart';
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(bool)? callback; // Optional callback
   final bool automaticallyImplyLeading;
+  final double elevation;
+  final bool isDarkMode;
   const GlobalAppBar(
-      {Key? key, this.callback, this.automaticallyImplyLeading = true})
+      {Key? key, this.callback, this.automaticallyImplyLeading = true, this.elevation = 1, this.isDarkMode = false})
       : super(key: key);
 
   @override
@@ -63,14 +65,14 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     return (automaticallyImplyLeading)
         ? AppBar(
             automaticallyImplyLeading: true,
-            backgroundColor: AppColors.backgroundColor,
-            iconTheme: const IconThemeData(color: AppColors.textColor),
-            elevation: 1,
+            backgroundColor: Theme.of(context).cardColor,
+            iconTheme: IconThemeData(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor),
+            elevation: elevation,
             title: const Logo(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout_outlined),
-                color: AppColors.textColor,
+                color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor,
                 onPressed: _logout,
               ),
             ],
@@ -78,14 +80,14 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
         : AppBar(
             automaticallyImplyLeading: false,
             leading: const BackButton(),
-            backgroundColor: AppColors.backgroundColor,
-            iconTheme: const IconThemeData(color: AppColors.textColor),
+            backgroundColor: Theme.of(context).backgroundColor,
+            iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
             elevation: 1,
             title: const Logo(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout_outlined),
-                color: AppColors.textColor,
+                color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor,
                 onPressed: _logout,
               ),
             ],

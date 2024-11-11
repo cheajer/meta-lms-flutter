@@ -12,6 +12,13 @@ class TopicsDao extends DatabaseAccessor<AppDatabase> with _$TopicsDaoMixin {
   // Define a method to retrieve all topics from the database
   Future<List<Topic>> getAllTopics() => select(topics).get();
 
+  // Method to get a topic name using the topicId
+  Future<String?> getTopicNameById(int topicId) async {
+    final query = select(topics)..where((t) => t.id.equals(topicId));
+    final topic = await query.getSingleOrNull();
+    return topic?.topicName;
+  }
+
   // Define a method to watch all topics as a stream
   Stream<List<Topic>> watchAllTopics() => select(topics).watch();
 
@@ -32,5 +39,14 @@ class TopicsDao extends DatabaseAccessor<AppDatabase> with _$TopicsDaoMixin {
           ])
           ..limit(1)) // Limit to only one result
         .getSingleOrNull(); // Get the single topic or return null if none exists
+  }
+
+  // Method to update the lastAccessed time for a given topic ID
+  Future<void> updateLastAccessed(int topicId) async {
+    await (update(topics)..where((t) => t.id.equals(topicId))).write(
+      TopicsCompanion(
+        lastAccessed: Value(DateTime.now()), // Set lastAccessed to the current datetime
+      ),
+    );
   }
 }

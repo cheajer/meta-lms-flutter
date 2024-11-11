@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 100,
               ), // Ensure you have this SVG in your assets
               const SizedBox(height: 30),
-              const Text(
+              Text(
                 'MetaLMS',
                 style: TextStyle(
                     fontSize: 24,

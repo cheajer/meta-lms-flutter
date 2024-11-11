@@ -64,7 +64,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const GlobalAppBar(),
-      backgroundColor: AppColors.surfaceColor,
+            backgroundColor: Theme.of(context).cardColor,
       body: Column(
         children: [
           _buildAssessmentHeaderBar(),

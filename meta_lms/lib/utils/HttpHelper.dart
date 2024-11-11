@@ -7,7 +7,7 @@ class HttpHelper {
   http.Client client;
 
   HttpHelper({
-    this.baseUrl = 'https://2205-2001-8003-280b-2101-3966-8cab-c317-e0f4.ngrok-free.app',
+    this.baseUrl = 'https://de5b-101-184-29-123.ngrok-free.app',
     http.Client? client,
   }) : client = client ?? http.Client();
 

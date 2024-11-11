@@ -30,12 +30,12 @@ class ListButton extends StatelessWidget {
           children: [
             Icon(icon,
                 color:
-                    textColor ?? AppColors.textColor), // Icon aligned to start
+                     AppColors.primaryColor), // Icon aligned to start
             const SizedBox(width: 8), // Space between icon and text
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(color: textColor ?? AppColors.textColor),
+                style: TextStyle(color: textColor ?? Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor),
                 textAlign: TextAlign.left, // Text aligned to start
               ),
             ),
@@ -49,8 +49,7 @@ class ListButton extends StatelessWidget {
                 BorderRadius.circular(0.0), // Adjust the radius as needed
           ),
           backgroundColor: color ??
-              Colors
-                  .white, // Use the passed color or default to AppColors.primaryColor
+              Theme.of(context).backgroundColor, // Use the passed color or default to AppColors.primaryColor
           padding: const EdgeInsets.symmetric(
               horizontal: 16.0, vertical: 8.0), // Adjust the padding as needed
         ),

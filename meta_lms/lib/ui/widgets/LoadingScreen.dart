@@ -26,13 +26,10 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         // Use RotationTransition to rotate the SVG
-        child: RotationTransition(
-          turns: Tween(begin: 0.0, end: 1.0).animate(_controller), // Defines the animation
-          child: SvgPicture.asset('assets/icons/logo.svg'), // Path to your SVG file
-        ),
+        child: CircularProgressIndicator(),
       ),
     );
   }

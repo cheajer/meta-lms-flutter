@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:meta_lms/ui/widgets/GlobalAppBar.dart';
 import 'package:meta_lms/utils/AppColors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Dashboard extends StatelessWidget {
   final int numAssessments;
   final String nextDueStr;
-  const Dashboard({Key? key, required this.numAssessments, required this.nextDueStr}) : super(key: key);
+  const Dashboard(
+      {Key? key, required this.numAssessments, required this.nextDueStr})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,14 @@ class Dashboard extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: Row(children: const [
+                  child: Row(children: [
                     Expanded(
                         child: Center(
-                            child: Text("NEXT ASSESSMENT DUE IN",
-                                style: TextStyle(
+                            child: Text(
+                                AppLocalizations.of(context)
+                                        ?.nextAssessmentDue ??
+                                    "NEXT ASSESSMENT DUE IN",
+                                style: const TextStyle(
                                     color: AppColors.primaryColor,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700))))
@@ -30,15 +34,22 @@ class Dashboard extends StatelessWidget {
                 ),
                 const Divider(),
                 Expanded(
-                  child: Row(children: [const Spacer(), Text(nextDueStr), const Spacer()]),
+                  child: Row(children: [
+                    const Spacer(),
+                    Text(nextDueStr),
+                    const Spacer()
+                  ]),
                 ),
                 const Divider(),
                 Expanded(
-                  child: Row(children: const [
+                  child: Row(children: [
                     Expanded(
                         child: Center(
-                            child: Text("NUMBER OF OPEN ASSESSMENTS",
-                                style: TextStyle(
+                            child: Text(
+                                AppLocalizations.of(context)
+                                        ?.numberOfOpenAssessments ??
+                                    "NUMBER OF OPEN ASSESSMENTS",
+                                style: const TextStyle(
                                     color: AppColors.primaryColor,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700))))
@@ -46,9 +57,12 @@ class Dashboard extends StatelessWidget {
                 ),
                 const Divider(),
                 Expanded(
-                  child: Row(children: [const Spacer(), Text(numAssessments.toString()), const Spacer()]),
+                  child: Row(children: [
+                    const Spacer(),
+                    Text(numAssessments.toString()),
+                    const Spacer()
+                  ]),
                 ),
-
               ],
             )),
       ),

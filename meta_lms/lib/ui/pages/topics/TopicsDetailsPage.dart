@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:meta_lms/database/database.dart';
 import 'package:meta_lms/models/assessments/AssessmentDetailModel.dart';
 import 'package:meta_lms/provider/AuthProvider.dart';
+import 'package:meta_lms/provider/TopicProvider.dart';
 import 'package:meta_lms/services/ApiGateway.dart';
 import 'package:meta_lms/services/NavigationService.dart';
 import 'package:meta_lms/ui/pages/topics/TopicDetailsNavBar.dart';
@@ -89,9 +90,10 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
     _assessmentDetails = await _apiGateway.fetchAssessmentDetailModels(
         authProvider.getToken()!, widget.topic.id);
 
-    print(_assessmentDetails);
-    print(_assessments);
-    print(_resources);
+    var topicProvider = Provider.of<TopicProvider>(context, listen: false);
+    topicProvider.setRecentlyAccessedTopic(widget.topic);
+
+    await locator<AppDatabase>().topicsDao.updateLastAccessed(widget.topic.id);
 
     setLoading(false);
   }
@@ -118,7 +120,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
 
   Widget _buildDrawer() {
     return Drawer(
-      width: MediaQuery.of(context).size.width* 0.6,
+      width: MediaQuery.of(context).size.width * 0.6,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -129,7 +131,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
             ),
             child: Column(
               children: [
-                                Row(
+                Row(
                   children: [
                     Text(
                       widget.topic.topicName,
@@ -159,21 +161,23 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                         fit: BoxFit.cover,
                       ),
                 const Spacer(),
-
               ],
             ),
           ),
           ListView.builder(
               shrinkWrap: true,
-              itemCount: _tabList.length -1,
+              itemCount: _tabList.length - 1,
               itemBuilder: (context, index) {
                 return ListTile(
                   visualDensity: VisualDensity.comfortable,
-                  leading: Icon(_tabIconList[index], color: AppColors.primaryColor,),
+                  leading: Icon(
+                    _tabIconList[index],
+                    color: AppColors.primaryColor,
+                  ),
                   title: Text(
                     _tabList[index],
-                    style: const TextStyle(
-                      color: AppColors.textColor,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor,
                     ),
                   ),
                   onTap: () {
@@ -257,8 +261,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(resource.title,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
+                              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor)),
                         )
                       ]),
                     ),
@@ -300,8 +303,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(resource.title,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
+                              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor)),
                         )
                       ]),
                     ),
@@ -344,8 +346,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(resource.title,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
+                              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor)),
                         )
                       ]),
                     ),
@@ -395,8 +396,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(resource.title,
-                              style:
-                                  const TextStyle(color: AppColors.textColor)),
+                              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor)),
                         )
                       ]),
                     ),
@@ -527,7 +527,6 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
             _openAssessmentEssay(assessmentDetail);
             break;
         }
-        
       },
       child: Card(
         child: SizedBox(
@@ -546,16 +545,16 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Text(assessmentDetail.name,
-                          style: const TextStyle(color: AppColors.textColor)),
+                          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor)),
                     ),
                     const Spacer(),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Chip(
                         label: Text(
                           "0% Complete",
                           style: TextStyle(
-                              fontSize: 11, color: AppColors.textColor),
+                              fontSize: 11, color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor),
                         ),
                       ),
                     ),
@@ -568,8 +567,8 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         _daysUntilDue(assessmentDetail.timeRange),
-                        style: const TextStyle(
-                            color: AppColors.textColor, fontSize: 11),
+                        style:
+                            TextStyle(color: AppColors.textColor, fontSize: 11),
                       ),
                     )
                   ]),
@@ -664,7 +663,7 @@ class _TopicDetailsPageState extends State<TopicDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surfaceColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       drawer: _buildDrawer(),
       key: _scaffoldKey,
       appBar: const GlobalAppBar(

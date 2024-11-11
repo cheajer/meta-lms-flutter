@@ -7,6 +7,7 @@ class AssessmentDetailModel {
   final String status;
   final double proportion;
   final String timeRange;
+  final int topicId;
   final List<QuestionModel> questions;
 
   AssessmentDetailModel({
@@ -16,10 +17,11 @@ class AssessmentDetailModel {
     required this.status,
     required this.proportion,
     required this.timeRange,
+    required this.topicId,
     required this.questions,
   });
 
-  factory AssessmentDetailModel.fromJson(Map<String, dynamic> json) {
+  factory AssessmentDetailModel.fromJson(Map<String, dynamic> json, int topicId) {
     var questionsFromJson = json['questions'] as List;
     List<QuestionModel> questionsList = questionsFromJson.map((questionJson) => QuestionModel.fromJson(questionJson)).toList();
 
@@ -30,6 +32,7 @@ class AssessmentDetailModel {
       status: json['status'],
       proportion: json['proportion'].toDouble(),
       timeRange: json['timeRange'],
+      topicId: topicId,
       questions: questionsList,
     );
   }

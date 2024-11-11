@@ -15,12 +15,12 @@ class Logo extends StatelessWidget {
           width: 40,
         ),
         const SizedBox(width: 10), // Adds space between the logo and text
-        const Text(
+        Text(
           'METALMS',
           style: TextStyle(
             fontSize: 20, // You can adjust the size
             fontFamily: "Oswald",
-            color: AppColors.textColor, // Use a custom color from AppColors
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor, // Use a custom color from AppColors
             fontWeight: FontWeight.bold, // Make the text bold
           ),
         ),
